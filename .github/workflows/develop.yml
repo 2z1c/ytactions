@@ -1,0 +1,19 @@
+# This job listens for new releases and will build the appropriate artifacts
+# and upload them to the release.
+
+name: Release
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  contents: write
+
+jobs:
+  build-upload:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
