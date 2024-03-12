@@ -1,0 +1,38 @@
+# This job listens for new releases and will build the appropriate artifacts
+# and upload them to the release.
+
+name: Build_docker
+on:
+  push:
+    branches:
+      - develop
+      - docker*
+jobs:
+  build_ubuntu_docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    -
+      name: build docker and run
+      run:  ./.github/include/build_docker.sh
+  
+  build_ubuntu_arm64_docker:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env:
+          - ARCH: arm64
+    steps:
+    - uses: actions/checkout@v4
+    -
+      # Add support for more platforms with QEMU (optional)
+      # https://github.com/docker/setup-qemu-action
+      name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    -
+      name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    -
+      name: build docker and run
+      run:  ./.github/include/build_arm64_docker.sh
